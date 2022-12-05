@@ -36,12 +36,11 @@ static inline int process_fun(char* map, size_t size){
     offset++;
   }
   count_arr[0] = count0;
-  count_arr[1] = count1;
+  count_arr[8] = count1;
   return 0;
 }
 void* process_multi(char* arr){
   char this_thread = **(char**)arr;
-  char* head =  arr - this_thread *sizeof(char*);
   size_t offset = **((size_t**)(arr+256));//assume pointers are same size
   size_t right_bound = **((size_t**)(arr+256 + sizeof(void*)));
   
@@ -89,7 +88,7 @@ void* process_multi(char* arr){
 	break;
       }
       offset++;
-    } while (offset <= global_size);
+    } while (offset <= global_size);//while(1)?
   }
  done:
   count_arr[this_thread] = count0;
@@ -111,7 +110,7 @@ int main(int argc, char** argv){
   global_map = input_map;
   global_size = filesize;
   size_t offset_arr[9];
-  if (filesize < 1ul<<20){
+  if (!(filesize >> 16)){
     process_fun(input_map, filesize);
   }
   else{
