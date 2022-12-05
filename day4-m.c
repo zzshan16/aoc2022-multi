@@ -135,7 +135,7 @@ int main(int argc, char** argv){
     
     pthread_t *threads = malloc(8*sizeof(pthread_t));
     for(int i = 0; i < 8; ++i){
-      pthread_create(threads+i, 0, process_multi, ptrbuf+i*sizeof(char*));
+      pthread_create(threads+i, 0, (void*(*)(void*))process_multi, ptrbuf+i*sizeof(char*));
     }
     for(int i = 0; i < 8; ++i){
       pthread_join(*(threads+i), 0);
